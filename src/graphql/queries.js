@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 export const GET_REPOSITORIES = gql`
   query {
@@ -11,8 +11,26 @@ export const GET_REPOSITORIES = gql`
           forksCount
           ratingAverage
           reviewCount
+          ownerAvatarUrl
         }
       }
+    }
+  }
+`;
+
+export const AUTHENTICATE = gql`
+  mutation Authenticate($username: String!, $password: String!) {
+    authenticate(credentials: { username: $username, password: $password }) {
+      accessToken
+    }
+  }
+`;
+
+export const ME_QUERY = gql`
+  query Me {
+    me {
+      id
+      username
     }
   }
 `;
