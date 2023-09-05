@@ -1,5 +1,6 @@
 import { NativeRouter } from "react-router-native";
 import { ApolloProvider } from "@apollo/client";
+import { Provider } from "react-native-paper";
 
 import Main from "./src/components/Main";
 import createApolloClient from "./src/utils/apolloClient";
@@ -14,7 +15,9 @@ const App = () => {
     <NativeRouter>
       <ApolloProvider client={apolloClient}>
         <AuthStorageContext.Provider value={authStorage}>
-          <Main />
+          <Provider>
+            <Main />
+          </Provider>
         </AuthStorageContext.Provider>
       </ApolloProvider>
     </NativeRouter>

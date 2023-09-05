@@ -3,8 +3,9 @@ import { Button, View, StyleSheet } from "react-native";
 import { Formik } from "formik";
 import FormikTextInput from "./TextComponents/FormikTextInput";
 import { useSignIn } from "../hooks/useSignIn";
+import { useCreateUser } from "../hooks/useCreateUser";
 import useMyNavigator from "../hooks/useMyNavigator";
-import { signInValidationSchema } from "../utils/validationSchemas";
+import { signUpValidationSchema } from "../utils/validationSchemas";
 
 const styles = StyleSheet.create({
   container: {
@@ -15,13 +16,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export const SignInContainer = ({ onSubmit }) => {
+export const SignUpContainer = ({ onSubmit }) => {
   return (
     <View style={styles.container}>
       <Formik
-        initialValues={{ username: "", password: "" }}
+        initialValues={{ username: "", password: "", passwordConfirmation: "" }}
         onSubmit={onSubmit}
-        validationSchema={signInValidationSchema}
+        validationSchema={signUpValidationSchema}
       >
         {({ handleSubmit }) => (
           <>
@@ -36,10 +37,16 @@ export const SignInContainer = ({ onSubmit }) => {
               placeholder="Password"
               secureTextEntry
             />
+            <FormikTextInput
+              style={styles.input}
+              name="passwordConfirmation"
+              placeholder="Confirm Password"
+              secureTextEntry
+            />
             <Button
               style={styles.button}
               onPress={handleSubmit}
-              title="Sign in"
+              title="Sign Up"
             />
           </>
         )}
@@ -48,7 +55,8 @@ export const SignInContainer = ({ onSubmit }) => {
   );
 };
 
-const SignIn = () => {
+const SignUp = () => {
+  const [createUser] = useCreateUser();
   const [signIn] = useSignIn();
   const { goToHome } = useMyNavigator();
 
@@ -56,6 +64,7 @@ const SignIn = () => {
     const { username, password } = values;
 
     try {
+      await createUser({ username, password });
       await signIn({ username, password });
       goToHome();
     } catch (e) {
@@ -63,7 +72,7 @@ const SignIn = () => {
     }
   };
 
-  return <SignInContainer onSubmit={onSubmit} />;
+  return <SignUpContainer onSubmit={onSubmit} />;
 };
 
-export default SignIn;
+export default SignUp;
